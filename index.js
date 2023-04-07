@@ -91,3 +91,41 @@ app.post('/login', (req,res) =>{
   }
 })
 
+function register(
+  regusername, 
+  regpassword, 
+  regname, 
+  regemail
+  ){
+  //TODO: Check if username exist
+  let regmatched = dbUsers.find(element =>
+      element.username == regusername)
+      if(regmatched){
+          //console.log() is for server to read
+          console.log("Server: User existed");
+          //return is for user to read
+          return "This user exist"
+      }else {
+  dbUsers.push({
+      username: regusername,
+      password: regpassword,
+      name: regname,
+      email :regemail
+  })
+  console.log("Successfully adding a new user");
+  return "Registration Successful with the Username:" + regusername; // the sign '+' is used to combine line and var in "return"
+}
+}
+
+app.post('/register', (req, res) => {
+  let data = req.body
+  res.send(
+    register(
+      //should be same as the POST function in client.http -- line 35 in client.http
+      data.regusername,
+      data.regpassword,
+      data.regname,
+      data.regemail
+    )
+  );
+})
